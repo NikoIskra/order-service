@@ -1,0 +1,9 @@
+{
+    "name": "latitude",
+    "in": "query",
+    "required": true,
+    "schema": {
+        "type" : "number",
+        "format" : "float"
+    }
+}
