@@ -1,0 +1,4 @@
+{
+    "type" : "string",
+    "enum" : ["completed", "in-progress", "cancelled", "rejected"]
+}

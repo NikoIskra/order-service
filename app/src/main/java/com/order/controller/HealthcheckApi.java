@@ -4,7 +4,8 @@
  */
 package com.order.controller;
 
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
+import jakarta.validation.constraints.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

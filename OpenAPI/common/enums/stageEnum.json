@@ -1,0 +1,4 @@
+{
+    "type" : "string",
+    "enum" : ["new", "picked", "paid", "fullfilment", "delivery", "completed"]
+}
