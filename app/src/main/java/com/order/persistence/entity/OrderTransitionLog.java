@@ -1,5 +1,6 @@
 package com.order.persistence.entity;
 
+import com.order.model.StageEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class OrderTransitionLog {
   private String deliveryAddress;
 
   @Column(nullable = false)
-  private String stage;
+  private StageEnum stage;
 
   @Column(name = "complete_status", nullable = false)
   private String completeStatus;
@@ -44,7 +45,7 @@ public class OrderTransitionLog {
       Integer totalPriceCents,
       String clientContact,
       String deliveryAddress,
-      String stage,
+      StageEnum stage,
       String completeStatus,
       Timestamp createdAt,
       Order order) {
@@ -67,7 +68,7 @@ public class OrderTransitionLog {
       Integer totalPriceCents,
       String clientContact,
       String deliveryAddress,
-      String stage,
+      StageEnum stage,
       String completeStatus) {
     this.id = id;
     this.comment = comment;
@@ -118,11 +119,11 @@ public class OrderTransitionLog {
     this.deliveryAddress = deliveryAddress;
   }
 
-  public String getStage() {
+  public StageEnum getStage() {
     return stage;
   }
 
-  public void setStage(String stage) {
+  public void setStage(StageEnum stage) {
     this.stage = stage;
   }
 

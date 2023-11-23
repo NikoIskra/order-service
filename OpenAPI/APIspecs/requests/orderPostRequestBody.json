@@ -1,0 +1,14 @@
+{
+    "description": "Order to be created",
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "schema/orderPostRequestModel.json"
+        },
+        "example" : {
+          "$ref" : "example/orderPostRequestBodyExample.json"
+        }
+      }
+    }
+}

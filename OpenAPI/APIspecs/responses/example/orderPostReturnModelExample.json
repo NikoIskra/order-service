@@ -1,0 +1,32 @@
+{
+    "ok" : "true",
+    "result" : {
+        "orderNumber" : "29",
+        "providerId" : 1000,
+        "clientId" : "f8bbbb5b-7896-4b6b-98bc-ce90820d05c7",
+        "comment" : "order comment",
+        "totalPriceCents" : 92,
+        "clientContact" : "1234567890",
+        "deliveryAddress" : "1st street 72",
+        "stage" : "paid",
+        "status" : "completed",
+        "details" :
+            {
+                "provideritemId" : 17,
+                "quantity" : 1,
+                "priceCents" : 67,
+                "subItems" : [
+                    {
+                        "providerSubItemId" : 7,
+                        "quantity" : 3,
+                        "priceCents" : 12
+                    },
+                    {
+                        "prviderSubItemId" : 5,
+                        "quantity" : 1,
+                        "priceCents" : 31
+                    }
+                ]
+            }
+    }
+}

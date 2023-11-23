@@ -3,6 +3,8 @@ package com.order.test.persistence.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.order.model.StageEnum;
+import com.order.model.StatusEnum;
 import com.order.persistence.entity.Order;
 import com.order.persistence.repository.OrderRepository;
 import java.util.List;
@@ -10,7 +12,6 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,14 +30,14 @@ public class OrderRepositoryTest {
         new Order(
             1L,
             "12",
-            defaultUuid,
+            1000L,
             defaultUuid,
             "comment",
             14,
             "contact",
             "1st street",
-            "new",
-            "completed");
+            StageEnum.NEW,
+            StatusEnum.COMPLETED);
     return order;
   }
 
@@ -76,7 +77,6 @@ public class OrderRepositoryTest {
 
   @Test
   public void testInsertEmptyItem() {
-    Exception exception =
-        assertThrows(DataIntegrityViolationException.class, () -> insertEmptyOrder());
+    assertThrows(InternalError.class, () -> insertEmptyOrder());
   }
 }

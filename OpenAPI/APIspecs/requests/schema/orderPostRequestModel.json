@@ -1,0 +1,34 @@
+{
+    "type" : "object",
+    "required" : [
+        "providerId",
+        "clientContact",
+        "orderItemId"
+    ],
+    "properties" : {
+        "providerId" : {
+            "$ref" : "../../../common/props/longID.json"
+        },
+        "comment" : {
+            "type" : "string",
+            "maxLength" : 512
+        },
+        "clientContact" : {
+            "type" : "string",
+            "maxLength" : 512
+        },
+        "deliveryAddress" : {
+            "type" : "string",
+            "maxLength" : 512            
+        },
+        "orderItemId" : {
+            "$ref" : "../../../common/props/longID.json"
+        },
+        "orderSubItemIds" : {
+            "type" : "array",
+            "items" : {
+                "$ref" : "models/orderPostSubItemModel.json"
+            }
+        }
+    }
+}

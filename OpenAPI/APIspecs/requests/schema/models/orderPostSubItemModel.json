@@ -1,0 +1,15 @@
+{
+    "type" : "object",
+    "required" : [
+        "id"
+    ],
+    "properties" : {
+        "id" : {
+            "$ref" : "../../../../common/props/longID.json"
+        },
+        "quantity" : {
+            "type" : "integer",
+            "minimum" : 1
+        }
+    }
+}
