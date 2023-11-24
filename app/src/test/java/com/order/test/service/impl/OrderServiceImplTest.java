@@ -15,6 +15,7 @@ import com.order.model.OrderPostDetailsModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.model.OrderPostReturnModelResult;
+import com.order.model.RoleEnum;
 import com.order.model.StageEnum;
 import com.order.model.StatusEnum;
 import com.order.persistence.entity.Order;
@@ -171,7 +172,7 @@ public class OrderServiceImplTest {
     assertEquals(
         orderPostReturnModel.getResult().getTotalPriceCents(),
         orderPostReturnModel2.getResult().getTotalPriceCents());
-    verify(orderValidator).validateOrderPost(accountID);
+    verify(orderValidator).validateOrderPost(accountID, RoleEnum.CLIENT);
     verify(providerApiClient)
         .getItemReturnModel(
             orderPostRequestModel.getProviderId(),
@@ -199,7 +200,7 @@ public class OrderServiceImplTest {
     assertThrows(
         NotFoundException.class,
         () -> orderServiceImpl.createOrder(accountID, orderPostRequestModel));
-    verify(orderValidator).validateOrderPost(accountID);
+    verify(orderValidator).validateOrderPost(accountID, RoleEnum.CLIENT);
     verify(providerApiClient)
         .getItemReturnModel(
             orderPostRequestModel.getProviderId(),

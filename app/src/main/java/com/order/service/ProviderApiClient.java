@@ -4,8 +4,7 @@ import com.order.exception.BadRequestException;
 import com.order.model.ItemGetReturnModel;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,14 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProviderApiClient {
 
   @Value("${provider.base.url}")
   private String baseUrl;
 
   private final RestTemplate restTemplate;
-
-  private static final Logger logger = LoggerFactory.getLogger(ProviderApiClient.class);
 
   public ItemGetReturnModel getItemReturnModel(Long providerID, Long itemID, UUID accountID) {
     try {
@@ -37,9 +35,8 @@ public class ProviderApiClient {
       ItemGetReturnModel itemGetReturnModel = responseEntity.getBody();
       return itemGetReturnModel;
     } catch (Exception e) {
-      logger.info(e.getMessage());
-      logger.info(e.getLocalizedMessage());
-      logger.info(e.getCause().getMessage());
+      log.error(e.getLocalizedMessage());
+      log.error(e.getCause().getMessage());
       throw new BadRequestException("No item with that id and provider id found");
     }
   }

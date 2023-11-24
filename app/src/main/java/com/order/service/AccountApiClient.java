@@ -2,6 +2,7 @@ package com.order.service;
 
 import com.order.exception.BadRequestException;
 import com.order.model.AccountRoleIDReturnModel;
+import com.order.model.RoleEnum;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,27 +18,15 @@ public class AccountApiClient {
 
   private final RestTemplate restTemplate;
 
-  public void verifyAccountIDProvider(UUID accountID) {
+  public void verifyAccountID(UUID accountID, RoleEnum role) {
     try {
       AccountRoleIDReturnModel accountRoleIDReturnModel =
           restTemplate.getForObject(
-              baseUrl + "/api/v1/account/{account_id}/role/PROVIDER",
+              baseUrl + "/api/v1/account/{account_id}/role/" + role.toString().toUpperCase(),
               AccountRoleIDReturnModel.class,
               accountID.toString());
     } catch (Exception e) {
-      throw new BadRequestException("No provider role for this account found");
-    }
-  }
-
-  public void verifyAccountIDClient(UUID accountID) {
-    try {
-      AccountRoleIDReturnModel accountRoleIDReturnModel =
-          restTemplate.getForObject(
-              baseUrl + "/api/v1/account/{account_id}/role/CLIENT",
-              AccountRoleIDReturnModel.class,
-              accountID.toString());
-    } catch (Exception e) {
-      throw new BadRequestException("No client role for this account found");
+      throw new BadRequestException("No " + role.toString() + " role for this account found");
     }
   }
 }

@@ -3,6 +3,7 @@ package com.order.service.impl;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
+import com.order.model.RoleEnum;
 import com.order.model.StageEnum;
 import com.order.model.StatusEnum;
 import com.order.persistence.entity.Order;
@@ -38,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public OrderPostReturnModel createOrder(
       UUID accountID, OrderPostRequestModel orderPostRequestModel) {
-    orderValidator.validateOrderPost(accountID);
+    orderValidator.validateOrderPost(accountID, RoleEnum.CLIENT);
     ItemGetReturnModel itemGetReturnModel =
         providerApiClient.getItemReturnModel(
             orderPostRequestModel.getProviderId(),
