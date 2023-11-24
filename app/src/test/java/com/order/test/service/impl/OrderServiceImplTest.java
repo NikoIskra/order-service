@@ -15,6 +15,7 @@ import com.order.model.OrderPostDetailsModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.model.OrderPostReturnModelResult;
+import com.order.model.RoleEnum;
 import com.order.model.StageEnum;
 import com.order.model.StatusEnum;
 import com.order.persistence.entity.Order;
@@ -22,7 +23,6 @@ import com.order.persistence.entity.OrderItem;
 import com.order.persistence.entity.OrderSubItem;
 import com.order.persistence.repository.OrderRepository;
 import com.order.service.EntityConverterService;
-import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
 import com.order.service.impl.OrderServiceImpl;
@@ -44,8 +44,6 @@ public class OrderServiceImplTest {
   @Mock ProviderApiClient providerApiClient;
 
   @Mock OrderRepository orderRepository;
-
-  @Mock OrderNumberGenerator orderNumberGenerator;
 
   @InjectMocks OrderServiceImpl orderServiceImpl;
 
@@ -144,7 +142,6 @@ public class OrderServiceImplTest {
         .thenReturn(orderItem);
     when(entityConverterService.convertOrderToOrderReturnModel(order))
         .thenReturn(orderPostReturnModel);
-    when(orderNumberGenerator.generateOrderNumber()).thenReturn(orderNumber);
     OrderPostReturnModel orderPostReturnModel2 =
         orderServiceImpl.createOrder(accountID, orderPostRequestModel);
     assertEquals(orderPostReturnModel.isOk(), orderPostReturnModel2.isOk());
@@ -171,7 +168,7 @@ public class OrderServiceImplTest {
     assertEquals(
         orderPostReturnModel.getResult().getTotalPriceCents(),
         orderPostReturnModel2.getResult().getTotalPriceCents());
-    verify(orderValidator).validateOrderPost(accountID);
+    verify(orderValidator).validateOrderPost(accountID, RoleEnum.CLIENT);
     verify(providerApiClient)
         .getItemReturnModel(
             orderPostRequestModel.getProviderId(),
@@ -184,7 +181,6 @@ public class OrderServiceImplTest {
     verify(entityConverterService).convertPostRequestModelToOrder(orderPostRequestModel);
     verify(entityConverterService).convertItemGetToOrderItem(itemGetReturnModel.getResult());
     verify(entityConverterService).convertOrderToOrderReturnModel(order);
-    verify(orderNumberGenerator).generateOrderNumber();
     verify(orderRepository).save(order);
   }
 
@@ -199,12 +195,12 @@ public class OrderServiceImplTest {
     assertThrows(
         NotFoundException.class,
         () -> orderServiceImpl.createOrder(accountID, orderPostRequestModel));
-    verify(orderValidator).validateOrderPost(accountID);
+    verify(orderValidator).validateOrderPost(accountID, RoleEnum.CLIENT);
     verify(providerApiClient)
         .getItemReturnModel(
             orderPostRequestModel.getProviderId(),
             orderPostRequestModel.getOrderItemId(),
             accountID);
-    verifyNoInteractions(entityConverterService, orderNumberGenerator, orderRepository);
+    verifyNoInteractions(entityConverterService, orderRepository);
   }
 }

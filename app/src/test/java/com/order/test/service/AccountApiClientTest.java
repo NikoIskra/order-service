@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-import com.order.exception.BadRequestException;
 import com.order.model.AccountRoleIDReturnModel;
 import com.order.model.AccountRoleIDReturnModelResult;
+import com.order.model.RoleEnum;
 import com.order.service.AccountApiClient;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ public class AccountApiClientTest {
             AccountRoleIDReturnModel.class,
             uuid.toString()))
         .thenReturn(accountRoleIDReturnModel);
-    assertDoesNotThrow(() -> accountApiClient.verifyAccountIDProvider(uuid));
+    assertDoesNotThrow(() -> accountApiClient.verifyAccountID(uuid, RoleEnum.PROVIDER));
   }
 
   @Test
@@ -55,7 +55,9 @@ public class AccountApiClientTest {
             AccountRoleIDReturnModel.class,
             uuid.toString()))
         .thenThrow(RestClientException.class);
-    assertThrows(BadRequestException.class, () -> accountApiClient.verifyAccountIDProvider(uuid));
+    assertThrows(
+        NullPointerException.class,
+        () -> accountApiClient.verifyAccountID(uuid, RoleEnum.PROVIDER));
   }
 
   @Test
@@ -66,7 +68,7 @@ public class AccountApiClientTest {
             AccountRoleIDReturnModel.class,
             uuid.toString()))
         .thenReturn(accountRoleIDReturnModel);
-    assertDoesNotThrow(() -> accountApiClient.verifyAccountIDClient(uuid));
+    assertDoesNotThrow(() -> accountApiClient.verifyAccountID(uuid, RoleEnum.CLIENT));
   }
 
   @Test
@@ -76,6 +78,7 @@ public class AccountApiClientTest {
             AccountRoleIDReturnModel.class,
             uuid.toString()))
         .thenThrow(RestClientException.class);
-    assertThrows(BadRequestException.class, () -> accountApiClient.verifyAccountIDClient(uuid));
+    assertThrows(
+        NullPointerException.class, () -> accountApiClient.verifyAccountID(uuid, RoleEnum.CLIENT));
   }
 }

@@ -2,12 +2,14 @@ package com.order.persistence.entity;
 
 import com.order.converter.StageEnumConverter;
 import com.order.converter.StatusEnumConverter;
+import com.order.listener.OrderListener;
 import com.order.model.StageEnum;
 import com.order.model.StatusEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +23,7 @@ import java.util.UUID;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
+@EntityListeners(OrderListener.class)
 @Table(name = "orders")
 public class Order {
   @Id

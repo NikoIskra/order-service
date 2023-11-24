@@ -8,15 +8,18 @@ import com.order.persistence.repository.OrderItemRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
-@DataJpaTest
 @org.springframework.transaction.annotation.Transactional(propagation = Propagation.NOT_SUPPORTED)
 @ActiveProfiles("test")
+@SpringBootTest
+@AutoConfigureTestDatabase
 public class OrderItemRepositoryTest {
 
   @Autowired OrderItemRepository orderItemRepository;

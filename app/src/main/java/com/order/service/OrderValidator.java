@@ -4,6 +4,7 @@ import com.order.exception.NotFoundException;
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderPostSubItemModel;
+import com.order.model.RoleEnum;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,8 +17,8 @@ public class OrderValidator {
 
   private final AccountApiClient accountApiClient;
 
-  public void validateOrderPost(UUID accountID) {
-    accountApiClient.verifyAccountIDClient(accountID);
+  public void validateOrderPost(UUID accountID, RoleEnum role) {
+    accountApiClient.verifyAccountID(accountID, role);
   }
 
   public void validateRetrievedItem(

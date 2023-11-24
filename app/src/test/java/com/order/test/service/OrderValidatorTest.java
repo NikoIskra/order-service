@@ -9,6 +9,7 @@ import com.order.model.ItemGetReturnModel;
 import com.order.model.ItemGetReturnModelResult;
 import com.order.model.ItemStatusEnum;
 import com.order.model.OrderPostSubItemModel;
+import com.order.model.RoleEnum;
 import com.order.service.AccountApiClient;
 import com.order.service.OrderValidator;
 import java.util.List;
@@ -53,8 +54,8 @@ public class OrderValidatorTest {
   }
 
   @Test
-  void testValidateOrderPost() {
-    assertDoesNotThrow(() -> orderValidator.validateOrderPost(accountID));
+  void testValidateOrder() {
+    assertDoesNotThrow(() -> orderValidator.validateOrderPost(accountID, RoleEnum.CLIENT));
   }
 
   @Test
