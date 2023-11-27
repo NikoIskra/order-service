@@ -3,6 +3,7 @@ package com.order.test.persistence.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.order.model.StageEnum;
 import com.order.persistence.entity.OrderTransitionLog;
 import com.order.persistence.repository.OrderTransitionLogRepository;
 import java.util.List;
@@ -23,7 +24,8 @@ public class OrderTransitionLogRepositoryTest {
 
   private static OrderTransitionLog createOrderTransitionLog() {
     OrderTransitionLog orderTransitionLog =
-        new OrderTransitionLog("id", "comment", 15, "12345", "1st street", "new", "completed");
+        new OrderTransitionLog(
+            "id", "comment", 15, "12345", "1st street", StageEnum.NEW, "completed");
     return orderTransitionLog;
   }
 

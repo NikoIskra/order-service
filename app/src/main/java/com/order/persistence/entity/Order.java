@@ -1,7 +1,12 @@
 package com.order.persistence.entity;
 
+import com.order.converter.StageEnumConverter;
+import com.order.converter.StatusEnumConverter;
+import com.order.model.StageEnum;
+import com.order.model.StatusEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +35,7 @@ public class Order {
   private String orderNumber;
 
   @Column(name = "provider_id", nullable = false)
-  private UUID providerId;
+  private Long providerId;
 
   @Column(name = "client_id", nullable = false)
   private UUID clientId;
@@ -45,9 +50,11 @@ public class Order {
   @Column(name = "delivery_address")
   private String deliveryAddress;
 
-  private String stage;
+  @Convert(converter = StageEnumConverter.class)
+  private StageEnum stage;
 
-  private String status;
+  @Convert(converter = StatusEnumConverter.class)
+  private StatusEnum status;
 
   @Column(name = "created_at", insertable = false)
   private Timestamp createdAt;
@@ -56,29 +63,29 @@ public class Order {
   @UpdateTimestamp
   private Timestamp updatedAt;
 
-  @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
-  private List<OrderItem> orders;
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  private List<OrderItem> orderItems;
 
   @OneToOne(mappedBy = "order")
   private OrderTransitionLog orderTransitionLog;
 
   public Order(
       Long id,
-      String order_number,
-      UUID providerId,
+      String orderNumber,
+      Long providerId,
       UUID clientId,
       String comment,
       Integer totalPriceCents,
       String clientContact,
       String deliveryAddress,
-      String stage,
-      String status,
+      StageEnum stage,
+      StatusEnum status,
       Timestamp createdAt,
       Timestamp updatedAt,
-      List<OrderItem> orders,
+      List<OrderItem> orderItems,
       OrderTransitionLog orderTransitionLog) {
     this.id = id;
-    this.orderNumber = order_number;
+    this.orderNumber = orderNumber;
     this.providerId = providerId;
     this.clientId = clientId;
     this.comment = comment;
@@ -89,23 +96,23 @@ public class Order {
     this.status = status;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.orders = orders;
+    this.orderItems = orderItems;
     this.orderTransitionLog = orderTransitionLog;
   }
 
   public Order(
       Long id,
-      String order_number,
-      UUID providerId,
+      String orderNumber,
+      Long providerId,
       UUID clientId,
       String comment,
       Integer totalPriceCents,
       String clientContact,
       String deliveryAddress,
-      String stage,
-      String status) {
+      StageEnum stage,
+      StatusEnum status) {
     this.id = id;
-    this.orderNumber = order_number;
+    this.orderNumber = orderNumber;
     this.providerId = providerId;
     this.clientId = clientId;
     this.comment = comment;
@@ -130,15 +137,15 @@ public class Order {
     return orderNumber;
   }
 
-  public void setOrderNumber(String order_number) {
-    this.orderNumber = order_number;
+  public void setOrderNumber(String orderNumber) {
+    this.orderNumber = orderNumber;
   }
 
-  public UUID getProviderId() {
+  public Long getProviderId() {
     return providerId;
   }
 
-  public void setProviderId(UUID providerId) {
+  public void setProviderId(Long providerId) {
     this.providerId = providerId;
   }
 
@@ -182,19 +189,19 @@ public class Order {
     this.deliveryAddress = deliveryAddress;
   }
 
-  public String getStage() {
+  public StageEnum getStage() {
     return stage;
   }
 
-  public void setStage(String stage) {
+  public void setStage(StageEnum stage) {
     this.stage = stage;
   }
 
-  public String getStatus() {
+  public StatusEnum getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(StatusEnum status) {
     this.status = status;
   }
 
@@ -214,12 +221,12 @@ public class Order {
     this.updatedAt = updatedAt;
   }
 
-  public List<OrderItem> getOrders() {
-    return orders;
+  public List<OrderItem> getOrderItems() {
+    return orderItems;
   }
 
-  public void setOrders(List<OrderItem> orders) {
-    this.orders = orders;
+  public void setOrderItems(List<OrderItem> orderItems) {
+    this.orderItems = orderItems;
   }
 
   public OrderTransitionLog getOrderTransitionLog() {

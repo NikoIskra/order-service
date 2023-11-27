@@ -1,0 +1,17 @@
+{
+    "providerId" : "1000",
+    "comment" : "order comment",
+    "clientContact" : "1234567890",
+    "deliveryAddress" : "1st street 25",
+    "orderItemId" : 1,
+    "orderSubItemIds" : [
+        {
+            "id" : 1,
+            "quantity" : 1
+        },
+        {
+            "id" : 2,
+            "quantity" : 3
+        }
+    ]
+}

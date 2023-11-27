@@ -1,0 +1,14 @@
+{
+    "type" : "object",
+    "properties" : {
+        "providerSubItemId" : {
+            "$ref" : "../../../../../common/props/longID.json"
+        },
+        "quantity" : {
+            "type" : "integer"
+        },
+        "priceCents" : {
+            "type" : "integer"
+        }
+    }
+}

@@ -3,21 +3,22 @@ package com.order.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.util.*;
 import java.util.Objects;
 import org.hibernate.validator.constraints.*;
 
-/** ErrorResponse */
-@JsonTypeName("errorResponse")
+/** OrderPostReturnModel */
+@JsonTypeName("orderPostReturnModel")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class ErrorResponse {
+public class OrderPostReturnModel {
 
   private Boolean ok;
 
-  private String errorMessage;
+  private OrderPostReturnModelResult result;
 
-  public ErrorResponse ok(Boolean ok) {
+  public OrderPostReturnModel ok(Boolean ok) {
     this.ok = ok;
     return this;
   }
@@ -36,23 +37,24 @@ public class ErrorResponse {
     this.ok = ok;
   }
 
-  public ErrorResponse errorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public OrderPostReturnModel result(OrderPostReturnModelResult result) {
+    this.result = result;
     return this;
   }
 
   /**
-   * Get errorMessage
+   * Get result
    *
-   * @return errorMessage
+   * @return result
    */
-  @JsonProperty("errorMessage")
-  public String getErrorMessage() {
-    return errorMessage;
+  @Valid
+  @JsonProperty("result")
+  public OrderPostReturnModelResult getResult() {
+    return result;
   }
 
-  public void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
+  public void setResult(OrderPostReturnModelResult result) {
+    this.result = result;
   }
 
   @Override
@@ -63,22 +65,22 @@ public class ErrorResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ErrorResponse errorResponse = (ErrorResponse) o;
-    return Objects.equals(this.ok, errorResponse.ok)
-        && Objects.equals(this.errorMessage, errorResponse.errorMessage);
+    OrderPostReturnModel orderPostReturnModel = (OrderPostReturnModel) o;
+    return Objects.equals(this.ok, orderPostReturnModel.ok)
+        && Objects.equals(this.result, orderPostReturnModel.result);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ok, errorMessage);
+    return Objects.hash(ok, result);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ErrorResponse {\n");
+    sb.append("class OrderPostReturnModel {\n");
     sb.append("    ok: ").append(toIndentedString(ok)).append("\n");
-    sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
+    sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("}");
     return sb.toString();
   }

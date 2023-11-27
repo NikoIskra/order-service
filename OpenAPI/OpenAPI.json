@@ -17,6 +17,34 @@
           }
         }
       }
+    },
+    "/api/v1/order" : {
+      "post" : {
+        "operationId" : "createOrder",
+        "tags" : [
+          "order"
+        ],
+        "description" : "create an order",
+        "parameters" : [
+          {
+            "$ref" : "common/params/headers/accountIDParam.json"
+          }
+        ],
+        "requestBody" : {
+          "$ref" : "APIspecs/requests/orderPostRequestBody.json"
+        },
+        "responses" : {
+          "201" : {
+            "$ref" : "APIspecs/responses/orderCreated.json"
+          },
+          "409" : {
+            "$ref" : "APIspecs/responses/conflict.json"
+          },
+          "404" : {
+            "$ref" : "APIspecs/responses/notFound.json"
+          }
+        }
+      }
     }
   }
 }
