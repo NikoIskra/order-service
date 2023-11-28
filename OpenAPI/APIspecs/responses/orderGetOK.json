@@ -1,0 +1,13 @@
+{
+    "description": "retrieved",
+    "content": {
+        "application/json": {
+            "schema": {
+                "$ref": "schema/orderGetReturnModel.json"
+            },
+            "example" : {
+                "$ref" : "example/orderGetReturnModelExample.json"
+            }
+        }
+    }
+}

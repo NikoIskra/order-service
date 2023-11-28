@@ -2,6 +2,8 @@ package com.order.service;
 
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModelResult;
+import com.order.model.OrderGetReturnModel;
+import com.order.model.OrderGetReturnModelResult;
 import com.order.model.OrderPostDetailsModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
@@ -67,5 +69,13 @@ public class EntityConverterService {
         modelMapper.map(order.getOrderItems().get(0), OrderPostDetailsModel.class);
     orderPostReturnModelResult.setDetails(orderPostDetailsModel);
     return new OrderPostReturnModel().ok(true).result(orderPostReturnModelResult);
+  }
+
+  public OrderGetReturnModel converOrderToOrderGetReturnModel(Order order) {
+    OrderGetReturnModelResult result = modelMapper.map(order, OrderGetReturnModelResult.class);
+    OrderPostDetailsModel model =
+        modelMapper.map(order.getOrderItems().get(0), OrderPostDetailsModel.class);
+    result.setDetails(model);
+    return new OrderGetReturnModel().ok(true).result(result);
   }
 }

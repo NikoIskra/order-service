@@ -1,0 +1,38 @@
+{
+    "type" : "object",
+    "properties" : {
+        "id" : {
+            "$ref" : "../../../../common/props/longID.json"
+        },
+        "orderNumber" : {
+            "type" : "string"
+        },
+        "providerId" : {
+            "$ref" : "../../../../common/props/longID.json"
+        },
+        "clientId" : {
+            "$ref" : "../../../../common/props/UUID.json"
+        },
+        "comment" : {
+            "type" : "string"
+        },
+        "totalPriceCents" : {
+            "type" : "integer"
+        },
+        "clientContact" : {
+            "type" : "string"
+        },
+        "deliveryAddress" : {
+            "type" : "string"
+        },
+        "stage" : {
+            "$ref" : "../../../../common/enums/stageEnum.json"
+        },
+        "status" : {
+            "$ref" : "../../../../common/enums/statusEnum.json"
+        },
+        "details" : {
+            "$ref" : "models/orderPostDetailsModel.json"
+        }
+    }
+}

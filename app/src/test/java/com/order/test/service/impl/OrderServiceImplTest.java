@@ -2,6 +2,8 @@ package com.order.test.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -11,6 +13,8 @@ import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.ItemGetReturnModelResult;
 import com.order.model.ItemStatusEnum;
+import com.order.model.OrderGetReturnModel;
+import com.order.model.OrderGetReturnModelResult;
 import com.order.model.OrderPostDetailsModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
@@ -122,6 +126,25 @@ public class OrderServiceImplTest {
     return orderItem;
   }
 
+  private static OrderGetReturnModel createOrderGetReturnModel() {
+    OrderPostDetailsModel orderPostDetailsModel =
+        new OrderPostDetailsModel().providerItemId(2L).quantity(1).priceCents(1500);
+    OrderGetReturnModelResult result =
+        new OrderGetReturnModelResult()
+            .id(1L)
+            .orderNumber(orderNumber)
+            .providerId(1L)
+            .clientId(accountID)
+            .comment("comment")
+            .totalPriceCents(1500)
+            .clientContact("1st street 123")
+            .deliveryAddress("1st street 123")
+            .stage(StageEnum.NEW)
+            .status(StatusEnum.IN_PROGRESS)
+            .details(orderPostDetailsModel);
+    return new OrderGetReturnModel().ok(true).result(result);
+  }
+
   @Test
   void testCreateOrder() {
     OrderPostRequestModel orderPostRequestModel = createOrderPostRequestModel();
@@ -207,5 +230,49 @@ public class OrderServiceImplTest {
             orderPostRequestModel.getOrderItemId(),
             accountID);
     verifyNoInteractions(entityConverterService, orderNumberGenerator, orderRepository);
+  }
+
+  @Test
+  void testGetOrder() {
+    Order order = createOrder();
+    OrderGetReturnModel orderGetReturnModel = createOrderGetReturnModel();
+    when(orderRepository.getById(anyLong())).thenReturn(order);
+    when(entityConverterService.converOrderToOrderGetReturnModel(order))
+        .thenReturn(orderGetReturnModel);
+    OrderGetReturnModel orderGetReturnModel2 = orderServiceImpl.getOrder(accountID, 1L);
+    assertEquals(orderGetReturnModel.isOk(), orderGetReturnModel2.isOk());
+    assertEquals(
+        orderGetReturnModel.getResult().getOrderNumber(),
+        orderGetReturnModel2.getResult().getOrderNumber());
+    assertEquals(
+        orderGetReturnModel.getResult().getClientId(),
+        orderGetReturnModel2.getResult().getClientId());
+    assertEquals(
+        orderGetReturnModel.getResult().getClientContact(),
+        orderGetReturnModel2.getResult().getClientContact());
+    assertEquals(
+        orderGetReturnModel.getResult().getDeliveryAddress(),
+        orderGetReturnModel2.getResult().getDeliveryAddress());
+    assertEquals(
+        orderGetReturnModel.getResult().getProviderId(),
+        orderGetReturnModel2.getResult().getProviderId());
+    assertEquals(
+        orderGetReturnModel.getResult().getStage(), orderGetReturnModel2.getResult().getStage());
+    assertEquals(
+        orderGetReturnModel.getResult().getStatus(), orderGetReturnModel2.getResult().getStatus());
+    assertEquals(
+        orderGetReturnModel.getResult().getTotalPriceCents(),
+        orderGetReturnModel2.getResult().getTotalPriceCents());
+    verify(orderValidator).validateOrderGet(accountID, 1L);
+    verify(orderRepository).getById(1L);
+    verify(entityConverterService).converOrderToOrderGetReturnModel(order);
+  }
+
+  @Test
+  void testGetOrder_validatorException() {
+    doThrow(NotFoundException.class).when(orderValidator).validateOrderGet(accountID, 1L);
+    assertThrows(NotFoundException.class, () -> orderServiceImpl.getOrder(accountID, 1L));
+    verify(orderValidator).validateOrderGet(accountID, 1L);
+    verifyNoInteractions(orderRepository, entityConverterService);
   }
 }

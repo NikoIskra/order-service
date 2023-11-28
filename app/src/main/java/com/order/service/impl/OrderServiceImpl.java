@@ -1,6 +1,7 @@
 package com.order.service.impl;
 
 import com.order.model.ItemGetReturnModel;
+import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.model.RoleEnum;
@@ -74,5 +75,12 @@ public class OrderServiceImpl implements OrderService {
     order.setOrderNumber(orderNumberGenerator.generateOrderNumber());
     orderRepository.save(order);
     return entityConverterService.convertOrderToOrderReturnModel(order);
+  }
+
+  @Override
+  public OrderGetReturnModel getOrder(UUID accountID, Long orderID) {
+    orderValidator.validateOrderGet(accountID, orderID);
+    Order order = orderRepository.getById(orderID);
+    return entityConverterService.converOrderToOrderGetReturnModel(order);
   }
 }

@@ -2,6 +2,8 @@ package com.order.test.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
 
 import com.order.exception.NotFoundException;
 import com.order.model.GetItemsSubItemModel;
@@ -10,6 +12,7 @@ import com.order.model.ItemGetReturnModelResult;
 import com.order.model.ItemStatusEnum;
 import com.order.model.OrderPostSubItemModel;
 import com.order.model.RoleEnum;
+import com.order.persistence.repository.OrderRepository;
 import com.order.service.AccountApiClient;
 import com.order.service.OrderValidator;
 import java.util.List;
@@ -24,6 +27,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class OrderValidatorTest {
 
   @Mock AccountApiClient accountApiClient;
+
+  @Mock OrderRepository orderRepository;
 
   @InjectMocks OrderValidator orderValidator;
 
@@ -78,5 +83,17 @@ public class OrderValidatorTest {
         () ->
             orderValidator.validateRetrievedItem(
                 itemGetReturnModel, List.of(orderPostSubItemModel)));
+  }
+
+  @Test
+  public void testValidateOrderGet() {
+    when(orderRepository.existsById(anyLong())).thenReturn(true);
+    assertDoesNotThrow(() -> orderValidator.validateOrderGet(accountID, 1L));
+  }
+
+  @Test
+  public void testValidateOrderGet_orderDoesNotExist() {
+    when(orderRepository.existsById(anyLong())).thenReturn(false);
+    assertThrows(NotFoundException.class, () -> orderValidator.validateOrderGet(accountID, 1L));
   }
 }

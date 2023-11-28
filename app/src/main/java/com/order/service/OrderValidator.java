@@ -5,6 +5,7 @@ import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderPostSubItemModel;
 import com.order.model.RoleEnum;
+import com.order.persistence.repository.OrderRepository;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,8 +18,17 @@ public class OrderValidator {
 
   private final AccountApiClient accountApiClient;
 
+  private final OrderRepository orderRepository;
+
   public void validateOrderPost(UUID accountID, RoleEnum role) {
     accountApiClient.verifyAccountID(accountID, role);
+  }
+
+  public void validateOrderGet(UUID accountID, Long orderID) {
+    accountApiClient.verifyAccountID(accountID, RoleEnum.MANAGER);
+    if (!orderRepository.existsById(orderID)) {
+      throw new NotFoundException("no order with that ID found!");
+    }
   }
 
   public void validateRetrievedItem(

@@ -1,0 +1,8 @@
+{
+    "name": "order-id",
+    "in": "path",
+    "required": true,
+    "schema": {
+      "$ref" : "../../props/longID.json"
+    }
+}

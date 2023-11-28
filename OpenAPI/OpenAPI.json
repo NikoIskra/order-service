@@ -45,6 +45,31 @@
           }
         }
       }
+    },
+    "/api/v1/order/{order-id}" : {
+      "get" : {
+        "operationId": "getOrder",
+        "tags": [
+          "order"
+        ],
+        "description": "get Order",
+        "parameters": [
+          {
+            "$ref" : "common/params/headers/accountIDParam.json"
+          },
+          {
+            "$ref" : "common/params/pathParams/orderIdPathParam.json"
+          }
+        ],
+        "responses": {
+          "200" : {
+            "$ref" : "APIspecs/responses/orderGetOK.json"
+          },
+          "404" : {
+            "$ref" : "APIspecs/responses/notFound.json"
+          }
+        }
+      }
     }
   }
 }

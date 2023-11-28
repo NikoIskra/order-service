@@ -4,6 +4,7 @@
  */
 package com.order.controller;
 
+import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import jakarta.annotation.Generated;
@@ -34,5 +35,21 @@ public interface OrderApi {
   ResponseEntity<OrderPostReturnModel> createOrder(
       @NotNull @RequestHeader(value = "X-ACCOUNT-ID", required = true) UUID X_ACCOUNT_ID,
       @Valid @RequestBody OrderPostRequestModel orderPostRequestModel)
+      throws Exception;
+
+  /**
+   * GET /api/v1/order/{order-id} get Order
+   *
+   * @param X_ACCOUNT_ID (required)
+   * @param orderId (required)
+   * @return retrieved (status code 200) or Not found! (status code 404)
+   */
+  @RequestMapping(
+      method = RequestMethod.GET,
+      value = "/api/v1/order/{order-id}",
+      produces = {"application/json"})
+  ResponseEntity<OrderGetReturnModel> getOrder(
+      @NotNull @RequestHeader(value = "X-ACCOUNT-ID", required = true) UUID X_ACCOUNT_ID,
+      @PathVariable("order-id") Long orderId)
       throws Exception;
 }
