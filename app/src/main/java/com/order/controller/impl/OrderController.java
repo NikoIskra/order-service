@@ -1,6 +1,7 @@
 package com.order.controller.impl;
 
 import com.order.controller.OrderApi;
+import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.service.OrderService;
@@ -31,5 +32,12 @@ public class OrderController implements OrderApi {
     return ResponseEntity.status(HttpStatus.CREATED)
         .headers(returnHeaders)
         .body(orderPostReturnModel);
+  }
+
+  @Override
+  public ResponseEntity<OrderGetReturnModel> getOrder(@NotNull UUID X_ACCOUNT_ID, Long orderId)
+      throws Exception {
+    OrderGetReturnModel model = orderService.getOrder(X_ACCOUNT_ID, orderId);
+    return ResponseEntity.status(HttpStatus.OK).body(model);
   }
 }

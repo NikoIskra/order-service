@@ -1,0 +1,32 @@
+@account_id = 86fd29fc-eb3e-48c4-a6e6-7fd50b92d131
+
+# @name orderPost
+post http://localhost:3001/api/v1/order
+X-ACCOUNT-ID : {{account_id}}
+content-type : application/json
+
+{
+    "providerId" : 1000,
+    "comment" : "comment",
+    "clientContact" : "1st street 123",
+    "deliveryAddress" : "1st street 123",
+    "orderItemId" : 1,
+    "orderSubItemIds" : [
+        {
+            "id" : 1,
+            "quantity" : 2
+        },
+        {
+            "id" : 2,
+            "quantity" : 3
+        }
+    ]
+}
+
+###
+
+@order_id = 1
+
+# @name orderGet
+get http://localhost:3001/api/v1/order/{{order_id}}
+X-ACCOUNT_ID : {{account_id}}

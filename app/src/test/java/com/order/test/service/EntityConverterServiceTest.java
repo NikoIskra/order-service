@@ -6,6 +6,7 @@ import com.order.config.Configuration;
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModelResult;
 import com.order.model.ItemStatusEnum;
+import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.model.OrderPostSubItemModel;
@@ -129,6 +130,23 @@ public class EntityConverterServiceTest {
   void testConvertOrderToOrderReturnModel() {
     Order order = createOrder();
     OrderPostReturnModel returnModel = entityConverterService.convertOrderToPostReturnModel(order);
+    assertEquals(order.getOrderNumber(), returnModel.getResult().getOrderNumber());
+    assertEquals(order.getProviderId(), returnModel.getResult().getProviderId());
+    assertEquals(order.getClientId(), returnModel.getResult().getClientId());
+    assertEquals(order.getComment(), returnModel.getResult().getComment());
+    assertEquals(order.getTotalPriceCents(), returnModel.getResult().getTotalPriceCents());
+    assertEquals(order.getClientContact(), returnModel.getResult().getClientContact());
+    assertEquals(order.getDeliveryAddress(), returnModel.getResult().getDeliveryAddress());
+    assertEquals(order.getStage(), returnModel.getResult().getStage());
+    assertEquals(order.getStatus(), returnModel.getResult().getStatus());
+  }
+
+  @Test
+  void testConvertOrderToOrderGetReturnModel() {
+    Order order = createOrder();
+    OrderGetReturnModel returnModel =
+        entityConverterService.converOrderToOrderGetReturnModel(order);
+    assertEquals(order.getId(), returnModel.getResult().getId());
     assertEquals(order.getOrderNumber(), returnModel.getResult().getOrderNumber());
     assertEquals(order.getProviderId(), returnModel.getResult().getProviderId());
     assertEquals(order.getClientId(), returnModel.getResult().getClientId());
