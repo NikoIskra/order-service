@@ -1,5 +1,9 @@
 package com.order.service.impl;
 
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
@@ -16,14 +20,19 @@ import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderService;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
   private final OrderValidator orderValidator;
@@ -35,6 +44,17 @@ public class OrderServiceImpl implements OrderService {
   private final OrderRepository orderRepository;
 
   private final OrderNumberGenerator orderNumberGenerator;
+
+  private final ObjectMapper objectMapper;
+
+  private final QueueMessagingTemplate queueMessagingTemplate;
+
+  private final AmazonSQSAsync amazonSQS;
+
+  private final EntityManager entityManager;
+
+  @Value("${sqs.queueName}")
+  private String queueName;
 
   @Override
   @Transactional
@@ -74,6 +94,18 @@ public class OrderServiceImpl implements OrderService {
     order.setStatus(StatusEnum.IN_PROGRESS);
     order.setOrderNumber(orderNumberGenerator.generateOrderNumber());
     orderRepository.save(order);
+    entityManager.flush();
+    try {
+      amazonSQS.sendMessage(
+          new SendMessageRequest()
+              .withQueueUrl(
+                  "http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/order-event")
+              .withMessageBody(
+                  objectMapper.writeValueAsString(
+                      entityConverterService.converOrderToOrderGetReturnModel(order).getResult())));
+    } catch (JsonProcessingException e) {
+      log.error(e.getCause().getMessage());
+    }
     return entityConverterService.convertOrderToOrderReturnModel(order);
   }
 

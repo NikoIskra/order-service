@@ -2,14 +2,26 @@ services:
   order-service:
     build: 
       dockerfile: Dockerfile
+    container_name: order-service
     ports:
       - 3001:3001
+    expose:
+      - "3001"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/order_service_db
       - DB_HOST=database
       - POSTGRES_DB=order_service_db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - ACCOUNT.BASE.URL=http://account-service:3000
+      - PROVIDER.BASE.URL=http://provider-service:3002
+      - AWS.ACCESSKEYID=EXAMPLEKEY
+      - AWS.SECRETKEY=EXAMPLESECRETKEY
+      - SQS.REGION=eu-central-1
+      - SQS.QUEUENAME=order-event
+    networks:
+      - default
+      - service-network
   database:
     image: postgres:14.1-alpine
     restart: always
@@ -19,16 +31,29 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=order_service_db
-    ports:
-      - 5433:5433
   localstack:
     image: localstack/localstack:latest
     environment:
-      - AWS_DEFAULT_REGION=eu-central-1
+      - AWS_DEFAULT_REGION=us-east-1 
       - EDGE_PORT=4566
-      - SERVICES=sqs, sns, s3
+      - SERVICES=sqs, s3, sns
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_KEY=test
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LS_LOG=debug
     ports:
-      - '4566:4566'
+      - '4566:4566' 
+      - "4510-4559:4510-4559"
+    volumes:
+    - "./aws-localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"  # ready hook
+    - "${LOCALSTACK_VOLUME_DIR:-./.volume}:/var/lib/localstack"
+    - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: [ "CMD", "awslocal", "s3api", "wait", "object-exists", "--bucket" ]
 volumes:
   db:
     driver: local
+networks:
+  service-network:
+    driver: bridge
+    external: true

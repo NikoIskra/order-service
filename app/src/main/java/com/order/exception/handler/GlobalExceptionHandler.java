@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler
+  @ExceptionHandler({Exception.class})
   protected ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
     ErrorResponse errorResponse =
         new ErrorResponse().ok(false).errorMessage(ExceptionUtils.getRootCause(ex).toString());

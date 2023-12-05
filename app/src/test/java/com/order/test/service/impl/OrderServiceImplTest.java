@@ -8,6 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.exception.NotFoundException;
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModel;
@@ -31,6 +33,7 @@ import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
 import com.order.service.impl.OrderServiceImpl;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -51,6 +54,12 @@ public class OrderServiceImplTest {
   @Mock OrderRepository orderRepository;
 
   @Mock OrderNumberGenerator orderNumberGenerator;
+
+  @Mock EntityManager entityManager;
+
+  @Mock ObjectMapper objectMapper;
+
+  @Mock AmazonSQSAsync amazonSQSAsync;
 
   @InjectMocks OrderServiceImpl orderServiceImpl;
 
@@ -152,7 +161,11 @@ public class OrderServiceImplTest {
     ItemGetReturnModel itemGetReturnModel = createItemGetReturnModel();
     Order order = createOrder();
     OrderItem orderItem = createOrderItem();
+    OrderGetReturnModel orderGetReturnModel = createOrderGetReturnModel();
+    OrderGetReturnModelResult result = orderGetReturnModel.getResult();
     OrderPostReturnModel orderPostReturnModel = createOrderPostReturnModel();
+    when(entityConverterService.converOrderToOrderGetReturnModel(order))
+        .thenReturn(orderGetReturnModel);
     when(providerApiClient.getItemReturnModel(
             orderPostRequestModel.getProviderId(),
             orderPostRequestModel.getOrderItemId(),
@@ -210,6 +223,7 @@ public class OrderServiceImplTest {
     verify(entityConverterService).convertOrderToOrderReturnModel(order);
     verify(orderNumberGenerator).generateOrderNumber();
     verify(orderRepository).save(order);
+    verify(entityManager).flush();
   }
 
   @Test
