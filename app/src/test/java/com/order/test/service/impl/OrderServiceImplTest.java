@@ -8,8 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.exception.NotFoundException;
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModel;
@@ -32,6 +30,7 @@ import com.order.service.EntityConverterService;
 import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
+import com.order.service.SQSMessageSender;
 import com.order.service.impl.OrderServiceImpl;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -57,9 +56,7 @@ public class OrderServiceImplTest {
 
   @Mock EntityManager entityManager;
 
-  @Mock ObjectMapper objectMapper;
-
-  @Mock AmazonSQSAsync amazonSQSAsync;
+  @Mock SQSMessageSender sqsMessageSender;
 
   @InjectMocks OrderServiceImpl orderServiceImpl;
 

@@ -1,8 +1,6 @@
 package com.order.service.impl;
 
 import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderGetReturnModel;
@@ -21,7 +19,6 @@ import com.order.service.OrderService;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
 import com.order.service.SQSMessageSender;
-
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -99,7 +96,8 @@ public class OrderServiceImpl implements OrderService {
     order.setOrderNumber(orderNumberGenerator.generateOrderNumber());
     orderRepository.save(order);
     entityManager.flush();
-    sqsMessageSender.sendMessage(entityConverterService.converOrderToOrderGetReturnModel(order).getResult());
+    sqsMessageSender.sendMessage(
+        entityConverterService.converOrderToOrderGetReturnModel(order).getResult());
     return entityConverterService.convertOrderToOrderReturnModel(order);
   }
 
