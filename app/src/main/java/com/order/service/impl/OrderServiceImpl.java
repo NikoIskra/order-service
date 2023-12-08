@@ -20,6 +20,8 @@ import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderService;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
+import com.order.service.SQSMessageSender;
+
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -52,6 +54,8 @@ public class OrderServiceImpl implements OrderService {
   private final AmazonSQSAsync amazonSQS;
 
   private final EntityManager entityManager;
+
+  private final SQSMessageSender sqsMessageSender;
 
   @Value("${sqs.queueName}")
   private String queueName;
@@ -95,17 +99,7 @@ public class OrderServiceImpl implements OrderService {
     order.setOrderNumber(orderNumberGenerator.generateOrderNumber());
     orderRepository.save(order);
     entityManager.flush();
-    try {
-      amazonSQS.sendMessage(
-          new SendMessageRequest()
-              .withQueueUrl(
-                  "http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/order-event")
-              .withMessageBody(
-                  objectMapper.writeValueAsString(
-                      entityConverterService.converOrderToOrderGetReturnModel(order).getResult())));
-    } catch (JsonProcessingException e) {
-      log.error(e.getCause().getMessage());
-    }
+    sqsMessageSender.sendMessage(entityConverterService.converOrderToOrderGetReturnModel(order).getResult());
     return entityConverterService.convertOrderToOrderReturnModel(order);
   }
 
