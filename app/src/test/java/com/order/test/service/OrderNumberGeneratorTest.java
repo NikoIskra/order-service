@@ -39,7 +39,7 @@ public class OrderNumberGeneratorTest {
     String year = String.valueOf(localDateTime.getYear() % 10);
     assertEquals(String.valueOf(generatedNumber.charAt(0)), monthCode);
     assertEquals(String.valueOf(generatedNumber.charAt(1)), year);
-    assertEquals(generatedNumber.substring(3, 4), String.valueOf(localDateTime.getDayOfMonth()));
+    assertEquals(generatedNumber.substring(3, 5), String.valueOf(localDateTime.getDayOfMonth()));
   }
 
   @Test

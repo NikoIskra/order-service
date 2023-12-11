@@ -10,9 +10,11 @@ import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Slf4j
+@Profile("!test2")
 public class SQSConfiguration {
 
   private String region = "us-east-1";
