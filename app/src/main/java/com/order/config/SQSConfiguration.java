@@ -25,7 +25,8 @@ public class SQSConfiguration {
     AmazonSQSAsyncClientBuilder builder =
         AmazonSQSAsyncClientBuilder.standard()
             .withCredentials(new DefaultAWSCredentialsProviderChain())
-            .withEndpointConfiguration(getEndpointConfiguration("http://localhost:4566"));
+            .withEndpointConfiguration(getEndpointConfiguration("http://localhost:4566"))
+            .withRegion(region);
     return builder.build();
   }
 

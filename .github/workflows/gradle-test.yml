@@ -26,11 +26,5 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: test
-        aws-secret-access-key: test
-        aws-region: us-east-1
     - name: Run tests
       run: ./gradlew test

@@ -76,10 +76,6 @@ spotless {
 
 test {
 	useJUnitPlatform()
-    exclude '**/controller/*'
-    exclude '**/persistence/*'
-    exclude '**/service/*'
-    systemProperty 'spring.profiles.active', 'test2'
 	testLogging {
 		events "passed", "skipped", "failed"
 	}
