@@ -11,8 +11,6 @@ import com.order.test.configuration.SQSTestConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.cloud.aws.messaging.listener.SimpleMessageListenerContainer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -23,8 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 public class AppTest {
 
   @Autowired ApplicationContext context;
-
-  @MockBean SimpleMessageListenerContainer simpleMessageListenerContainer;
 
   @Test
   void contextLoads(ApplicationContext context) {
