@@ -19,14 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.aws.messaging.config.annotation.EnableSqs;
 import org.springframework.cloud.aws.messaging.listener.SqsMessageDeletionPolicy;
 import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 @EnableSqs
 @RequiredArgsConstructor
-@Profile("!test2")
 public class SQSListener {
 
   @Value("${sqs.queueName}")

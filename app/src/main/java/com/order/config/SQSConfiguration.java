@@ -14,19 +14,16 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Slf4j
-@Profile("!test2")
 public class SQSConfiguration {
 
-  private String region = "us-east-1";
-
-  @Bean(name = "amazonSqs")
+  @Bean
+  @Profile("!test2")
   @Primary
   public AmazonSQSAsync amazonSQSAsync() {
     AmazonSQSAsyncClientBuilder builder =
         AmazonSQSAsyncClientBuilder.standard()
             .withCredentials(new DefaultAWSCredentialsProviderChain())
-            .withEndpointConfiguration(getEndpointConfiguration("http://localhost:4566"))
-            .withRegion(region);
+            .withEndpointConfiguration(getEndpointConfiguration("http://localhost:4566"));
     return builder.build();
   }
 
@@ -35,6 +32,7 @@ public class SQSConfiguration {
   }
 
   @Bean
+  @Primary
   public QueueMessagingTemplate queueMessagingTemplate(AmazonSQSAsync amazonSqs) {
     return new QueueMessagingTemplate(amazonSqs);
   }

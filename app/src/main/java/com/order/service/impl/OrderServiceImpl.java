@@ -1,7 +1,5 @@
 package com.order.service.impl;
 
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.order.model.ItemGetReturnModel;
 import com.order.model.OrderGetReturnModel;
 import com.order.model.OrderPostRequestModel;
@@ -26,13 +24,10 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Profile("!test2")
 @Slf4j
 public class OrderServiceImpl implements OrderService {
 
@@ -45,12 +40,6 @@ public class OrderServiceImpl implements OrderService {
   private final OrderRepository orderRepository;
 
   private final OrderNumberGenerator orderNumberGenerator;
-
-  private final ObjectMapper objectMapper;
-
-  private final QueueMessagingTemplate queueMessagingTemplate;
-
-  private final AmazonSQSAsync amazonSQS;
 
   private final EntityManager entityManager;
 
