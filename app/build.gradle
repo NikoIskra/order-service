@@ -41,6 +41,23 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation 'org.apache.logging.log4j:log4j-core:3.0.0-alpha1'
 
+    implementation(platform("software.amazon.awssdk:bom:2.21.35"))
+    implementation 'software.amazon.awssdk:sqs:2.21.35'
+    implementation 'software.amazon.awssdk:aws-sdk-java:2.21.35'
+    implementation 'software.amazon.awssdk:sns:2.21.35'
+
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-messaging
+    implementation 'org.springframework.cloud:spring-cloud-aws-messaging:2.2.6.RELEASE'
+    // https://mvnrepository.com/artifact/io.awspring.cloud/spring-cloud-aws-starter
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.0.3'
+    implementation 'io.awspring.cloud:spring-cloud-aws-sqs:3.0.3'
+
+    implementation 'org.springframework:spring-messaging:5.3.24'
+
+
+
+
 
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'javax.validation:validation-api:2.0.0.Final'

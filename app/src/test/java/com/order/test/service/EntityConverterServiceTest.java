@@ -7,6 +7,7 @@ import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModelResult;
 import com.order.model.ItemStatusEnum;
 import com.order.model.OrderGetReturnModel;
+import com.order.model.OrderGetReturnModelResult;
 import com.order.model.OrderPostRequestModel;
 import com.order.model.OrderPostReturnModel;
 import com.order.model.OrderPostSubItemModel;
@@ -15,6 +16,7 @@ import com.order.model.StatusEnum;
 import com.order.persistence.entity.Order;
 import com.order.persistence.entity.OrderItem;
 import com.order.persistence.entity.OrderSubItem;
+import com.order.persistence.entity.OrderTransitionLog;
 import com.order.service.EntityConverterService;
 import java.util.List;
 import java.util.UUID;
@@ -79,6 +81,22 @@ public class EntityConverterServiceTest {
             .status(ItemStatusEnum.ACTIVE)
             .subItems(List.of(createGetItemsSubItemModel()));
     return itemGetReturnModel;
+  }
+
+  private static OrderGetReturnModelResult createOrderGetReturnModelResult() {
+    OrderGetReturnModelResult result =
+        new OrderGetReturnModelResult()
+            .clientContact("1st street")
+            .clientId(accountID)
+            .comment("coment")
+            .deliveryAddress("1st street")
+            .id(1L)
+            .orderNumber(orderNumber)
+            .providerId(1L)
+            .stage(StageEnum.NEW)
+            .status(StatusEnum.IN_PROGRESS)
+            .totalPriceCents(1500);
+    return result;
   }
 
   @Test
@@ -156,5 +174,17 @@ public class EntityConverterServiceTest {
     assertEquals(order.getDeliveryAddress(), returnModel.getResult().getDeliveryAddress());
     assertEquals(order.getStage(), returnModel.getResult().getStage());
     assertEquals(order.getStatus(), returnModel.getResult().getStatus());
+  }
+
+  @Test
+  void testConvertOrderGetResultToOrderLog() {
+    OrderGetReturnModelResult result = createOrderGetReturnModelResult();
+    OrderTransitionLog log =
+        entityConverterService.convertOrderGetReturnModelResultToOrderTransitionLog(result);
+    assertEquals(result.getClientContact(), log.getClientContact());
+    assertEquals(result.getStage(), log.getStage());
+    assertEquals(result.getStatus(), log.getCompleteStatus());
+    assertEquals(result.getDeliveryAddress(), log.getDeliveryAddress());
+    assertEquals(result.getTotalPriceCents(), log.getTotalPriceCents());
   }
 }

@@ -16,14 +16,19 @@ import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderService;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
+import com.order.service.SQSMessageSender;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
   private final OrderValidator orderValidator;
@@ -35,6 +40,13 @@ public class OrderServiceImpl implements OrderService {
   private final OrderRepository orderRepository;
 
   private final OrderNumberGenerator orderNumberGenerator;
+
+  private final EntityManager entityManager;
+
+  private final SQSMessageSender sqsMessageSender;
+
+  @Value("${sqs.queueName}")
+  private String queueName;
 
   @Override
   @Transactional
@@ -74,6 +86,9 @@ public class OrderServiceImpl implements OrderService {
     order.setStatus(StatusEnum.IN_PROGRESS);
     order.setOrderNumber(orderNumberGenerator.generateOrderNumber());
     orderRepository.save(order);
+    entityManager.flush();
+    sqsMessageSender.sendMessage(
+        entityConverterService.converOrderToOrderGetReturnModel(order).getResult());
     return entityConverterService.convertOrderToOrderReturnModel(order);
   }
 

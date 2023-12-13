@@ -30,7 +30,9 @@ import com.order.service.EntityConverterService;
 import com.order.service.OrderNumberGenerator;
 import com.order.service.OrderValidator;
 import com.order.service.ProviderApiClient;
+import com.order.service.SQSMessageSender;
 import com.order.service.impl.OrderServiceImpl;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -51,6 +53,10 @@ public class OrderServiceImplTest {
   @Mock OrderRepository orderRepository;
 
   @Mock OrderNumberGenerator orderNumberGenerator;
+
+  @Mock EntityManager entityManager;
+
+  @Mock SQSMessageSender sqsMessageSender;
 
   @InjectMocks OrderServiceImpl orderServiceImpl;
 
@@ -152,7 +158,11 @@ public class OrderServiceImplTest {
     ItemGetReturnModel itemGetReturnModel = createItemGetReturnModel();
     Order order = createOrder();
     OrderItem orderItem = createOrderItem();
+    OrderGetReturnModel orderGetReturnModel = createOrderGetReturnModel();
+    OrderGetReturnModelResult result = orderGetReturnModel.getResult();
     OrderPostReturnModel orderPostReturnModel = createOrderPostReturnModel();
+    when(entityConverterService.converOrderToOrderGetReturnModel(order))
+        .thenReturn(orderGetReturnModel);
     when(providerApiClient.getItemReturnModel(
             orderPostRequestModel.getProviderId(),
             orderPostRequestModel.getOrderItemId(),
@@ -210,6 +220,7 @@ public class OrderServiceImplTest {
     verify(entityConverterService).convertOrderToOrderReturnModel(order);
     verify(orderNumberGenerator).generateOrderNumber();
     verify(orderRepository).save(order);
+    verify(entityManager).flush();
   }
 
   @Test

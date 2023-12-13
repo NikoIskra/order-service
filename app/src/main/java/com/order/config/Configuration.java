@@ -2,8 +2,10 @@ package com.order.config;
 
 import com.order.model.GetItemsSubItemModel;
 import com.order.model.ItemGetReturnModelResult;
+import com.order.model.OrderGetReturnModelResult;
 import com.order.persistence.entity.OrderItem;
 import com.order.persistence.entity.OrderSubItem;
+import com.order.persistence.entity.OrderTransitionLog;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -31,6 +33,10 @@ public class Configuration {
         modelMapper.createTypeMap(ItemGetReturnModelResult.class, OrderItem.class);
     itemGetToOrderItemTypeMap.addMapping(
         ItemGetReturnModelResult::getId, OrderItem::setProviderItemId);
+    TypeMap<OrderGetReturnModelResult, OrderTransitionLog> orderGetResultToOrderLogTypeMap =
+        modelMapper.createTypeMap(OrderGetReturnModelResult.class, OrderTransitionLog.class);
+    orderGetResultToOrderLogTypeMap.addMapping(
+        OrderGetReturnModelResult::getStatus, OrderTransitionLog::setCompleteStatus);
     return modelMapper;
   }
 

@@ -12,6 +12,7 @@ import com.order.model.OrderPostSubItemModel;
 import com.order.persistence.entity.Order;
 import com.order.persistence.entity.OrderItem;
 import com.order.persistence.entity.OrderSubItem;
+import com.order.persistence.entity.OrderTransitionLog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,5 +78,10 @@ public class EntityConverterService {
         modelMapper.map(order.getOrderItems().get(0), OrderPostDetailsModel.class);
     result.setDetails(model);
     return new OrderGetReturnModel().ok(true).result(result);
+  }
+
+  public OrderTransitionLog convertOrderGetReturnModelResultToOrderTransitionLog(
+      OrderGetReturnModelResult order) {
+    return modelMapper.map(order, OrderTransitionLog.class);
   }
 }
